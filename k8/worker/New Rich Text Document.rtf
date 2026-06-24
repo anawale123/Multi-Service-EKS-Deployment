@@ -1,24 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api-deployment
+  name: worker
+  namespace: url-shortener
   labels:
-    app: api
+    app.kubernetes.io/name: worker
 spec:
   replicas: 2
   selector:
-    labels:
-      app.kubernetes.io/name: api
+    matchLabels:
+      app.kubernetes.io/name: worker
   template:
     metadata:
       labels:
-        app: api
+        app.kubernetes.io/name: worker
     spec:
       containers:
-        - name: api
-          image: <ecr-url>/api:latest
-          ports:
-            - containerPort: 8080
+        - name: worker
+          image:
           resources:
             requests:
               memory: "128Mi"

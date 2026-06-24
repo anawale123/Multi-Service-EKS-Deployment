@@ -1,24 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api-deployment
+  name: dashboard
+  namespace: url-shortener
   labels:
-    app: api
+    app.kubernetes.io/name: dashboard
 spec:
   replicas: 2
   selector:
-    labels:
-      app.kubernetes.io/name: api
+    matchLabels:
+      app.kubernetes.io/name: dashboard
   template:
     metadata:
       labels:
-        app: api
+        app.kubernetes.io/name: dashboard
     spec:
       containers:
-        - name: api
-          image: <ecr-url>/api:latest
+        - name: dashboard
+          image: 
           ports:
-            - containerPort: 8080
+            - containerPort: 8081
           resources:
             requests:
               memory: "128Mi"
