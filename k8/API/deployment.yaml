@@ -14,6 +14,7 @@ spec:
       labels:
         app: api
     spec:
+      serviceAccountName: api-sa
       containers:
         - name: api
           image: <ecr-url>/api:latest
