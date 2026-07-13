@@ -24,7 +24,7 @@ variable "private_ecs_cidr_a" {
 
 variable "private_ecs_cidr_b" {
   type        = string
-  default     = "10.0.6.0/24"
+  default     = "10.0.64.0/24"
 }
 
 
@@ -52,6 +52,10 @@ variable "private_redis_cidr" {
 variable "private_redis_cidr_b" {
   type        = string
   default     = "10.0.13.0/24"
+}
+
+variable "ssm_sg" {
+  type    = string 
 }
 
 variable "environment" {

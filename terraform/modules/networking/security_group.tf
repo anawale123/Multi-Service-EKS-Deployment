@@ -93,30 +93,6 @@ resource "aws_security_group" "redis_sg" {
   }
 }
 
-resource "aws_security_group" "vpc_endpoints_sg" {
-  name   = "vpc_endpoint_sg-${var.environment}"
-  vpc_id = aws_vpc.vpc_app.id
-
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = [var.vpc_cidr]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name        = "vpc_endpoint_sg"
-    Environment = var.environment
-  }
-}
-
 resource "aws_security_group_rule" "dashboard_to_rds" {
   type                     = "egress"
   from_port                = 5432
@@ -259,4 +235,41 @@ resource "aws_security_group_rule" "redis_from_worker" {
   protocol                 = "tcp"
   security_group_id        = aws_security_group.redis_sg.id
   source_security_group_id = aws_security_group.worker_sg.id
+}
+
+
+
+resource "aws_security_group" "vpc_endpoints_sg" {
+  name   = "vpc_endpoint_sg-${var.environment}"
+  vpc_id = aws_vpc.vpc_app.id
+
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = [var.vpc_cidr]
+  }
+
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name        = "vpc_endpoint_sg"
+    Environment = var.environment
+  }
+}
+
+resource "aws_security_group_rule" "vpc_endpoints_allow_bastion" {
+  type                      = "ingress"
+  from_port                 = 443
+  to_port                   = 443
+  protocol                  = "tcp"
+  security_group_id         = var.ssm_sg
+  source_security_group_id  = var.ssm_sg
+  
 }

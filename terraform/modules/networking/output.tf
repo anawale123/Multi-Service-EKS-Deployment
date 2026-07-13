@@ -63,3 +63,8 @@ output "redis_sg" {
   description = "redis sg"
   value       = aws_security_group.redis_sg.id
 }
+
+# vpc_endpoint sg
+output "vpc_endpoints_sg" {
+  value = aws_security_group.vpc_endpoints_sg.id
+}

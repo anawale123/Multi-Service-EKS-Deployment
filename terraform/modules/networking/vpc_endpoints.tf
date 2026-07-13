@@ -79,3 +79,31 @@ resource "aws_vpc_endpoint" "kms" {
     Environment = var.environment
   }
 }
+
+resource "aws_vpc_endpoint" "ec2" {
+  vpc_id              = aws_vpc.vpc_app.id
+  service_name        = "com.amazonaws.eu-west-2.ec2"
+  vpc_endpoint_type   = "Interface"
+  subnet_ids          = [aws_subnet.private_subnet_a.id]
+  security_group_ids  = [aws_security_group.vpc_endpoints_sg.id]
+  private_dns_enabled = true
+
+  tags = {
+    Name        = "ec2-endpoint-${var.environment}"
+    Environment = var.environment
+  }
+}
+
+resource "aws_vpc_endpoint" "sts" {
+  vpc_id              = aws_vpc.vpc_app.id
+  service_name        = "com.amazonaws.eu-west-2.sts"
+  vpc_endpoint_type   = "Interface"
+  subnet_ids          = [aws_subnet.private_subnet_a.id]
+  security_group_ids  = [aws_security_group.vpc_endpoints_sg.id]
+  private_dns_enabled = true
+
+  tags = {
+    Name        = "sts-endpoint-${var.environment}"
+    Environment = var.environment
+  }
+}

@@ -1,5 +1,6 @@
 module "networking" {
   source = "../../../modules/networking"
+  ssm_sg        =  module.bastion_host.ssm_sg
   environment   = var.environment
 
 }
@@ -31,13 +32,19 @@ module "redis" {
 module "eks" {
   source = "../../../modules/eks"
   
-  vpc_id        = module.networking.vpc_id
+  vpc_id      = module.networking.vpc_id
   private_subnet = module.networking.private_subnet
   environment   = var.environment
-  
-
+  vpc_endpoints_sg = module.networking.vpc_endpoints_sg
 }
 
+module "bastion_host" {
+  source = "../../../modules/bastion_host"
+  vpc_id        = module.networking.vpc_id
+  private_subnet = module.networking.private_subnet
+  vpc_endpoints_sg = module.networking.vpc_endpoints_sg
+  environment   = var.environment
+}
 
 variable "environment" {
   type = string
