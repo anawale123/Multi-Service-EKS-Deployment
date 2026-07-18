@@ -33,6 +33,11 @@ jobs:
           aws ecr get-login-password --region $AWS_REGION \
           | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
 
+      - name: create ecr repo
+        run: | 
+            aws ecr create-repository --repository-name api_image --region eu-west-2
+            aws ecr create-repository --repository-name dashboard_image --region eu-west-2
+            aws ecr create-repository --repository-name worker_image --region eu-west-2
       - name: Build api_image
         run: |
           docker build \
