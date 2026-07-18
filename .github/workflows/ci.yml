@@ -151,6 +151,3 @@ jobs:
           echo "image=${registry}:${image_tag}" >> $GITHUB_OUTPUT
 
      
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
-        with:
-          task-definition: ${{ steps.render_worker.outputs.task-definition }}
