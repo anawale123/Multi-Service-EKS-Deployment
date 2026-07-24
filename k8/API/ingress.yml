@@ -1,16 +1,12 @@
+# k8s/api/ingress.yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: url-shortener-ingress
+  name: api-ingress
   namespace: url-shortener
   annotations:
     kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
-  tls:
-    - hosts:
-        - url-shortener-aws.co.uk
-      secretName: url-shortener-tls
   rules:
     - http:
         paths:
@@ -28,41 +24,6 @@ spec:
                 name: api-service
                 port:
                   number: 8080
-          - path: /summary
-            pathType: Prefix
-            backend:
-              service:
-                name: dashboard-service
-                port:
-                  number: 8081
-          - path: /recent
-            pathType: Prefix
-            backend:
-              service:
-                name: dashboard-service
-                port:
-                  number: 8081
-          - path: /top
-            pathType: Prefix
-            backend:
-              service:
-                name: dashboard-service
-                port:
-                  number: 8081
-          - path: /url
-            pathType: Prefix
-            backend:
-              service:
-                name: dashboard-service
-                port:
-                  number: 8081
-          - path: /healthz
-            pathType: Prefix
-            backend:
-              service:
-                name: dashboard-service
-                port:
-                  number: 8081
           - path: /
             pathType: Prefix
             backend:
