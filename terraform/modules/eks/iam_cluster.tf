@@ -37,3 +37,20 @@ resource "aws_iam_openid_connect_provider" "cluster_oicd" {
   thumbprint_list = [data.tls_certificate.cluster.certificates[0].sha1_fingerprint]
   url             = aws_eks_cluster.k8_cluster.identity[0].oidc[0].issuer
 }
+
+
+resource "aws_eks_access_entry" "admin" {
+  cluster_name      = aws_eks_cluster.k8_cluster.name
+  principal_arn     = "arn:aws:iam::679930074435:user/eks_admin"
+  type              = "STANDARD"
+}
+
+resource "aws_eks_access_policy_association" "admin" {
+  cluster_name  = aws_eks_cluster.k8_cluster.name
+  principal_arn = "arn:aws:iam::679930074435:user/eks_admin"
+  policy_arn    = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+
+  access_scope {
+    type = "cluster"
+  }
+}

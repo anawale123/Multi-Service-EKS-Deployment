@@ -1,6 +1,17 @@
+terraform {
+  backend "s3" {
+    bucket       = "backend-remote-statefile"
+    key          = "eks/terraform.tfstate"
+    region       = "eu-west-2"
+    encrypt      = true
+    use_lockfile = true
+  }
+}
+
 module "networking" {
   source = "../../../modules/networking"
   ssm_sg        =  module.bastion_host.ssm_sg
+  nodes_sg      = module.eks.nodes_sg
   environment   = var.environment
 
 }
@@ -36,6 +47,24 @@ module "eks" {
   private_subnet = module.networking.private_subnet
   environment   = var.environment
   vpc_endpoints_sg = module.networking.vpc_endpoints_sg
+}
+
+
+module "alb" {
+  source         = "../../../modules/alb"
+  environment    = "production"
+  vpc_id         = module.networking.vpc_id
+  public_subnets = module.networking.public_subnets
+  alb_sg         = module.networking.alb_sg
+  s3_access_logs_alb = module.s3.s3_access_logs_alb
+}
+
+
+module "s3" {
+  source        = "../../../modules/s3"
+  environment   = "production"
+
+
 }
 
 module "bastion_host" {

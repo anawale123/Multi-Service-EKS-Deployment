@@ -14,20 +14,6 @@ spec:
   rules:
     - http:
         paths:
-          - path: /shorten
-            pathType: Prefix
-            backend:
-              service:
-                name: api-service
-                port:
-                  number: 8080
-          - path: /stats
-            pathType: Prefix
-            backend:
-              service:
-                name: api-service
-                port:
-                  number: 8080
           - path: /summary
             pathType: Prefix
             backend:
@@ -63,10 +49,3 @@ spec:
                 name: dashboard-service
                 port:
                   number: 8081
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: api-service
-                port:
-                  number: 8080

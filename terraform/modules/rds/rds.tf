@@ -1,14 +1,15 @@
 # rds cred
-data "aws_secretsmanager_secret" "db_creds" {
-  name = "shortener_cred"
+data "aws_secretsmanager_secret" "db_cred" {
+  name = "db_cred"
+  
 }
 
-data "aws_secretsmanager_secret_version" "db_creds" {
-  secret_id = data.aws_secretsmanager_secret.db_creds.id
+data "aws_secretsmanager_secret_version" "db_cred" {
+  secret_id = data.aws_secretsmanager_secret.db_cred.id
 }
 
 locals {
-  db_creds = jsondecode(data.aws_secretsmanager_secret_version.db_creds.secret_string)
+  db_cred = jsondecode(data.aws_secretsmanager_secret_version.db_cred.secret_string)
 }
 
 # subnet group
@@ -23,8 +24,8 @@ resource "aws_db_subnet_group" "db_subnet_group" {
 
 # rds instance config
 resource "aws_db_instance" "main_rds" {
-  username                = local.db_creds.username
-  password                = local.db_creds.password
+  username                = local.db_cred.username
+  password                = local.db_cred.password
   identifier              = "rds-db-${var.environment}"
   engine                  = "postgres"
   engine_version          = "15.13"
@@ -39,7 +40,7 @@ resource "aws_db_instance" "main_rds" {
   skip_final_snapshot     = true
 
   maintenance_window      = "Fri:09:00-Fri:09:30"
-  backup_retention_period = 7
+  backup_retention_period = 1
 
 
   tags = {

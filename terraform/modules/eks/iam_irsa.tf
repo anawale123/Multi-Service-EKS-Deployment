@@ -11,7 +11,7 @@ resource "aws_iam_policy" "secrets_read" {
         "secretsmanager:DescribeSecret"
       ]
       Resource = [
-        "arn:aws:secretsmanager:eu-west-2:703844615264:secret:DB_URL-CrV7Io"
+        "arn:aws:secretsmanager:eu-west-2:679930074435:secret:db_cred-xSueHj"
       ]
     }]
   })

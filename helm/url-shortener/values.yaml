@@ -1,0 +1,88 @@
+# API
+api:
+  replicaCount: 2
+
+  image:
+    repository: 679930074435.dkr.ecr.eu-west-2.amazonaws.com/api_image
+    tag: latest
+    pullPolicy: Always
+
+  containerPort: 8080
+
+  service:
+    type: ClusterIP
+    port: 8080
+
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "250m"
+    limits:
+      memory: "256Mi"
+      cpu: "500m"
+
+# Dashboard
+dashboard:
+  replicaCount: 2
+
+  image:
+    repository: 679930074435.dkr.ecr.eu-west-2.amazonaws.com/dashboard_image
+    tag: latest
+    pullPolicy: Always
+
+  containerPort: 8081
+
+  service:
+    type: ClusterIP
+    port: 8081
+
+
+
+
+
+
+# Worker
+worker:
+  replicaCount: 1
+
+  image:
+    repository: 679930074435.dkr.ecr.eu-west-2.amazonaws.com/worker_image
+    tag: latest
+    pullPolicy: Always
+
+
+
+
+
+# Ingress
+ingress:
+  enabled: true
+
+  className: alb
+
+  annotations:
+    kubernetes.io/ingress.class: alb
+
+  host: url-shortener.example.com
+
+
+# Service Accounts
+serviceAccount:
+  api:
+    create: true
+    name: api-sa
+
+  worker:
+    create: true
+    name: worker-sa
+
+
+# Environment variables
+env:
+  databaseUrl: ""
+
+
+
+
+autoscaling:
+  enabled: false

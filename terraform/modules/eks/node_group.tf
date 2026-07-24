@@ -28,9 +28,13 @@
 
 
 resource "aws_launch_template" "nodes" {
-  name                   = "eks-nodes-${var.environment}"
-  instance_type          = "t3.medium"
-  vpc_security_group_ids = [aws_security_group.nodes_sg.id]
+  name          = "eks-nodes-${var.environment}"
+  instance_type = "t3.micro"
+
+  network_interfaces {
+    associate_public_ip_address = false
+    security_groups             = [aws_security_group.nodes_sg.id]
+  }
 
   block_device_mappings {
     device_name = "/dev/xvda"

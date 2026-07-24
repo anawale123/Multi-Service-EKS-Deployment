@@ -58,6 +58,10 @@ variable "ssm_sg" {
   type    = string 
 }
 
+variable "nodes_sg" {
+  type    = string
+}
+
 variable "environment" {
     description = "environment phase " 
     type        =  string 
