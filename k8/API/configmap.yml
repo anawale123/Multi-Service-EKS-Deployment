@@ -7,5 +7,5 @@ data:
   APP_ENV: "dev"
   DB_HOST: "rds-db-dev.c9uu0o266g6u.eu-west-2.rds.amazonaws.com"
   DB_PORT: "5432"
-  REDIS_HOST: "arn:aws:elasticache:eu-west-2:679930074435:cluster:shortener-redis-dev"
+  REDIS_HOST: "master.shortener-redis-dev.xwosmi.euw2.cache.amazonaws.com"
   REDIS_PORT: "6379"

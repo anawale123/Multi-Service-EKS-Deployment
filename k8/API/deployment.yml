@@ -1,33 +1,40 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: worker
+  name: api-deployment
   namespace: url-shortener
   labels:
-    app.kubernetes.io/name: worker
+    app.kubernetes.io/name: api
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: worker
+      app.kubernetes.io/name: api
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: worker
+        app.kubernetes.io/name: api
     spec:
-      serviceAccountName: worker-sa
+      serviceAccountName: api-sa
       containers:
-        - name: worker
-          image: 679930074435.dkr.ecr.eu-west-2.amazonaws.com/worker_image
+        - name: api
+          image: 679930074435.dkr.ecr.eu-west-2.amazonaws.com/api_image
+          ports:
+            - containerPort: 8080
           envFrom:
             - configMapRef:
-                name: worker-config
+                name: api-config
           env:
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
                   name: db-secret
                   key: DATABASE_URL
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: redis-secret
+                  key: REDIS_PASSWORD
           resources:
             requests:
               memory: "128Mi"

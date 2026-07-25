@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/name: dashboard
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: dashboard
@@ -15,11 +15,21 @@ spec:
       labels:
         app.kubernetes.io/name: dashboard
     spec:
+      serviceAccountName: dashboard-sa
       containers:
         - name: dashboard
           image: 679930074435.dkr.ecr.eu-west-2.amazonaws.com/dashboard_image
           ports:
             - containerPort: 8081
+          envFrom:
+            - configMapRef:
+                name: dashboard-config
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: DATABASE_URL
           resources:
             requests:
               memory: "128Mi"
