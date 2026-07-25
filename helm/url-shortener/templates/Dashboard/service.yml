@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "url-shortener.fullname" . }}-dashboard-service
+  namespace: {{ .Values.namespace }}
+  labels:
+    app.kubernetes.io/name: dashboard
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: dashboard
+  ports:
+    - protocol: TCP
+      port: {{ .Values.dashboard.port }}
+      targetPort: {{ .Values.dashboard.port }}

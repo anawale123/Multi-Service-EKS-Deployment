@@ -1,0 +1,63 @@
+namespace: url-shortener
+
+ingress:
+  host: "url-shortener-aws.co.uk"
+  tlsSecret: "url-shortener-tls"
+  clusterIssuer: "letsencrypt-prod"
+
+api:
+  image: "679930074435.dkr.ecr.eu-west-2.amazonaws.com/api_image"
+  port: 8080
+  replicaCount: 1
+
+  secrets:
+    db: "db-secret"
+
+  irsaRoleArn: "arn:aws:iam::679930074435:role/api-irsa-dev"
+
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "250m"
+    limits:
+      memory: "256Mi"
+      cpu: "500m"
+
+dashboard:
+  image: "679930074435.dkr.ecr.eu-west-2.amazonaws.com/dashboard_image"
+  port: 8081
+  replicaCount: 1
+
+  irsaRoleArn: "arn:aws:iam::679930074435:role/dashboard-irsa-dev"
+
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "250m"
+    limits:
+      memory: "256Mi"
+      cpu: "500m"
+
+worker:
+  image: "679930074435.dkr.ecr.eu-west-2.amazonaws.com/worker_image"
+  replicaCount: 1
+
+  secrets:
+    db: "db-secret"
+
+  irsaRoleArn: "arn:aws:iam::679930074435:role/worker-irsa-dev"
+
+  config:
+    APP_ENV: "staging"
+    DB_PORT: "5432"
+    DB_HOST: "rds-db-staging.c9uu0o266g6u.eu-west-2.rds.amazonaws.com"
+    SQS_URL: "https://sqs.eu-west-2.amazonaws.com/679930074435/sqs-queue-dev"
+    SQS_DLQ_URL: "https://sqs.eu-west-2.amazonaws.com/679930074435/sqs-queue-dlq-dev"
+
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "250m"
+    limits:
+      memory: "256Mi"
+      cpu: "500m"

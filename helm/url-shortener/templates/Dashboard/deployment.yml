@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "url-shortener.fullname" . }}-dashboard
+  namespace: {{ .Values.namespace }}
+  labels:
+    app.kubernetes.io/name: dashboard
+spec:
+  replicas: {{ .Values.dashboard.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: dashboard
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: dashboard
+    spec:
+      serviceAccountName: {{ include "url-shortener.fullname" . }}-dashboard-sa
+      containers:
+        - name: dashboard
+          image: "{{ .Values.dashboard.image }}"
+          ports:
+            - containerPort: {{ .Values.dashboard.port }}
+
+          envFrom:
+            - configMapRef:
+                name: {{ include "url-shortener.fullname" . }}-dashboard-config
+
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.dashboard.secrets.db }}
+                  key: DATABASE_URL
+
+          resources:
+            requests:
+              memory: {{ .Values.dashboard.resources.requests.memory }}
+              cpu: {{ .Values.dashboard.resources.requests.cpu }}
+            limits:
+              memory: {{ .Values.dashboard.resources.limits.memory }}
+              cpu: {{ .Values.dashboard.resources.limits.cpu }}
