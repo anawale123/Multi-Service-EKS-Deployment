@@ -1,0 +1,22 @@
+controller:
+  replicaCount: 2
+
+  ingressClassResource:
+    name: nginx
+    enabled: true
+    default: true
+
+  ingressClass: nginx
+
+  service:
+    type: LoadBalancer
+
+  config:
+    use-forwarded-headers: "true"
+    proxy-body-size: "10m"
+
+  extraArgs:
+    default-ssl-certificate: "url-shortener/url-shortener-tls"
+
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod

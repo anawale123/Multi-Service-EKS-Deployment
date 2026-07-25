@@ -50,15 +50,6 @@ module "eks" {
 }
 
 
-module "alb" {
-  source         = "../../../modules/alb"
-  environment    = "production"
-  vpc_id         = module.networking.vpc_id
-  public_subnets = module.networking.public_subnets
-  alb_sg         = module.networking.alb_sg
-  s3_access_logs_alb = module.s3.s3_access_logs_alb
-}
-
 
 module "s3" {
   source        = "../../../modules/s3"
