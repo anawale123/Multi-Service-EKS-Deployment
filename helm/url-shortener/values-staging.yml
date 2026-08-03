@@ -1,0 +1,98 @@
+namespace: url-shortener
+
+ingress:
+  host: "url-shortener-aws.co.uk"
+  tlsSecret: "url-shortener-tls"
+  clusterIssuer: "letsencrypt-prod"
+
+api:
+  image: "235654897837.dkr.ecr.eu-west-2.amazonaws.com/api_image:latest"
+  port: 8080
+  replicaCount: 1
+
+  secrets:
+    db: "db-secret"
+    redis: "redis-secret"
+
+  config:
+    APP_ENV: "dev"
+    DB_HOST: "rds-db-staging.c9k6ou4igzom.eu-west-2.rds.amazonaws.com"
+    DB_PORT: "5432"
+    REDIS_HOST: "master.shortener-redis-staging.8sfgq4.euw2.cache.amazonaws.com:6379"
+    REDIS_PORT: "6379"
+
+  irsaRoleArn: "arn:aws:iam::235654897837:role/api-irsa-dev"
+
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "250m"
+    limits:
+      memory: "256Mi"
+      cpu: "500m"
+
+dashboard:
+  image: "235654897837.dkr.ecr.eu-west-2.amazonaws.com/dashboard_image"
+  port: 8081
+  replicaCount: 1
+
+  config:
+    APP_ENV: "dev"
+    DB_HOST: "rds-db-staging.c9k6ou4igzom.eu-west-2.rds.amazonaws.com"
+    DB_PORT: "5432"
+
+  irsaRoleArn: "arn:aws:iam::235654897837:role/dashboard-irsa-dev"
+
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "250m"
+    limits:
+      memory: "256Mi"
+      cpu: "500m"
+
+worker:
+  image: "235654897837.dkr.ecr.eu-west-2.amazonaws.com/worker_image"
+  replicaCount: 1
+
+  secrets:
+    db: "db-secret"
+
+  irsaRoleArn: "arn:aws:iam::235654897837:role/worker-irsa-dev"
+
+
+  config:
+    APP_ENV: "dev"
+    DB_PORT: "5432"
+    DB_HOST: "rds-db-staging.c9k6ou4igzom.eu-west-2.rds.amazonaws.com"
+    SQS_URL: "https://sqs.eu-west-2.amazonaws.com/235654897837/sqs-queue"
+    SQS_QUEUE_URL: "https://sqs.eu-west-2.amazonaws.com/235654897837/sqs-queue"
+    SQS_DLQ_URL: "https://sqs.eu-west-2.amazonaws.com/235654897837/sqs-queue-dlq"
+
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "250m"
+    limits:
+      memory: "256Mi"
+      cpu: "500m"
+
+
+grafana:
+  adminPassword: "changeme"
+  service:
+    type: ClusterIP
+
+prometheus:
+  prometheusSpec:
+    retention: 3d
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 250m
+        memory: 512Mi
+
+alertmanager:
+  enabled: false

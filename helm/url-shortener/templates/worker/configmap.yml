@@ -8,4 +8,5 @@ data:
   DB_PORT: {{ .Values.worker.config.DB_PORT | quote }}
   DB_HOST: {{ .Values.worker.config.DB_HOST | quote }}
   SQS_URL: {{ .Values.worker.config.SQS_URL | quote }}
+  SQS_QUEUE_URL: {{ .Values.worker.config.SQS_QUEUE_URL | quote }}
   SQS_DLQ_URL: {{ .Values.worker.config.SQS_DLQ_URL | quote }}

@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket       = "backend-remote-statefile"
+    bucket       = "eks-statefile-1"
     key          = "eks/terraform.tfstate"
     region       = "eu-west-2"
     encrypt      = true
@@ -54,9 +54,7 @@ module "eks" {
 
 module "s3" {
   source        = "../../../modules/s3"
-  environment   = "production"
-
-
+  environment   = var.environment
 }
 
 module "bastion_host" {
@@ -67,7 +65,14 @@ module "bastion_host" {
   environment   = var.environment
 }
 
+
+module "waf" {
+    source = "../../../modules/waf"
+    environment   = var.environment
+
+}
+
 variable "environment" {
   type = string
-  default = "dev"
+  default = "staging"
 }

@@ -13,3 +13,7 @@ variable "vpc_id" {
 variable "vpc_endpoints_sg" {
   type = string
 }
+
+variable "ssm_sg" {
+  type = string
+}

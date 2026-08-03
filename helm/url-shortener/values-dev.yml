@@ -12,6 +12,14 @@ api:
 
   secrets:
     db: "db-secret"
+    redis: "redis-secret"
+
+  config:
+    APP_ENV: "dev"
+    DB_HOST: "rds-db-dev.c9uu0o266g6u.eu-west-2.rds.amazonaws.com"
+    DB_PORT: "5432"
+    REDIS_HOST: "master.shortener-redis-dev.xwosmi.euw2.cache.amazonaws.com"
+    REDIS_PORT: "6379"
 
   irsaRoleArn: "arn:aws:iam::679930074435:role/api-irsa-dev"
 
@@ -24,9 +32,14 @@ api:
       cpu: "500m"
 
 dashboard:
-  image: "679930074435.dkr.ecr.eu-west-2.amazonaws.com/dashboard_image:latest"
+  image: "679930074435.dkr.ecr.eu-west-2.amazonaws.com/dashboard_image"
   port: 8081
   replicaCount: 1
+
+  config:
+    APP_ENV: "dev"
+    DB_HOST: "rds-db-dev.c9uu0o266g6u.eu-west-2.rds.amazonaws.com"
+    DB_PORT: "5432"
 
   irsaRoleArn: "arn:aws:iam::679930074435:role/dashboard-irsa-dev"
 
@@ -39,7 +52,7 @@ dashboard:
       cpu: "500m"
 
 worker:
-  image: "679930074435.dkr.ecr.eu-west-2.amazonaws.com/worker_image:latest"
+  image: "679930074435.dkr.ecr.eu-west-2.amazonaws.com/worker_image"
   replicaCount: 1
 
   secrets:
@@ -47,11 +60,13 @@ worker:
 
   irsaRoleArn: "arn:aws:iam::679930074435:role/worker-irsa-dev"
 
+
   config:
     APP_ENV: "dev"
     DB_PORT: "5432"
     DB_HOST: "rds-db-dev.c9uu0o266g6u.eu-west-2.rds.amazonaws.com"
     SQS_URL: "https://sqs.eu-west-2.amazonaws.com/679930074435/sqs-queue"
+    SQS_QUEUE_URL: "https://sqs.eu-west-2.amazonaws.com/679930074435/sqs-queue"
     SQS_DLQ_URL: "https://sqs.eu-west-2.amazonaws.com/679930074435/sqs-queue-dlq"
 
   resources:

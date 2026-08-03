@@ -1,8 +1,7 @@
 resource "aws_security_group" "cluster_sg" {
   name        = "eks-cluster"
   description = "EKS control plane security group"
-  vpc_id              = var.vpc_id
-
+  vpc_id      = var.vpc_id
 
   tags = {
     Name = "eks-cluster-sg"
@@ -12,7 +11,7 @@ resource "aws_security_group" "cluster_sg" {
 resource "aws_security_group" "nodes_sg" {
   name        = "eks-nodes-sg"
   description = "EKS node group security group"
-  vpc_id              = var.vpc_id
+  vpc_id      = var.vpc_id
 
   tags = {
     Name = "eks-nodes-sg"
@@ -36,6 +35,24 @@ resource "aws_security_group_rule" "cluster_to_nodes" {
   protocol                 = "tcp"
   security_group_id        = aws_security_group.cluster_sg.id
   source_security_group_id = aws_security_group.nodes_sg.id
+}
+
+resource "aws_security_group_rule" "cluster_from_nodes_443" {
+  type                     = "ingress"
+  from_port                = 443
+  to_port                  = 443
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.cluster_sg.id
+  source_security_group_id = aws_security_group.nodes_sg.id
+}
+
+resource "aws_security_group_rule" "cluster_from_bastion_443" {
+  type                     = "ingress"
+  from_port                = 443
+  to_port                  = 443
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.cluster_sg.id
+  source_security_group_id = var.ssm_sg
 }
 
 # nodes_sg rules 

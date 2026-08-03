@@ -32,8 +32,8 @@ resource "aws_iam_policy" "worker_sqs" {
         "sqs:ChangeMessageVisibility"
       ]
       Resource = [
-        "arn:aws:sqs:eu-west-2:703844615264:sqs-queue",
-        "arn:aws:sqs:eu-west-2:703844615264:sqs-queue-dlq"
+        "arn:aws:sqs:eu-west-2:679930074435:sqs-queue",
+        "arn:aws:sqs:eu-west-2:679930074435:sqs-queue-dlq"
       ]
     }]
   })

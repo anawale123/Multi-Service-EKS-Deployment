@@ -11,10 +11,12 @@
   }
 
   scaling_config {
-    desired_size = 2
-    min_size     = 1
-    max_size     = 5
+    desired_size = 3
+    min_size     = 6
+    max_size     = 1
   }
+
+
 
   lifecycle {
     ignore_changes = [scaling_config[0].desired_size]
@@ -29,7 +31,7 @@
 
 resource "aws_launch_template" "nodes" {
   name          = "eks-nodes-${var.environment}"
-  instance_type = "t3.micro"
+  instance_type = "t3.small"
 
   network_interfaces {
     associate_public_ip_address = false
