@@ -9,7 +9,7 @@ controller:
   ingressClass: nginx
 
   service:
-    type: LoadBalancer
+    type: ClusterIP
 
   config:
     use-forwarded-headers: "true"

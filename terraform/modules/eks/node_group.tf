@@ -11,12 +11,10 @@
   }
 
   scaling_config {
-    desired_size = 3
-    min_size     = 6
-    max_size     = 1
+  desired_size = 3
+  min_size     = 1
+  max_size     = 5
   }
-
-
 
   lifecycle {
     ignore_changes = [scaling_config[0].desired_size]

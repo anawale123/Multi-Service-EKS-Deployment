@@ -1,28 +1,26 @@
 resource "aws_subnet" "private_subnet_a" {
-  
-  vpc_id     = aws_vpc.vpc_app.id
-  cidr_block = var.private_ecs_cidr_a
+  vpc_id            = aws_vpc.vpc_app.id
+  cidr_block        = var.private_ecs_cidr_a
   availability_zone = "eu-west-2b"
 
   tags = {
-    Name        = "private-subnet-a-${var.environment}"
-    Environment = var.environment
-    "kubernetes.io/cluster/url-shortener-dev" = "shared"
-    "kubernetes.io/role/internal-elb"         = "1"
+    Name                                          = "private-subnet-a-${var.environment}"
+    Environment                                   = var.environment
+    "kubernetes.io/cluster/url-shortener-${var.environment}" = "shared"
+    "kubernetes.io/role/internal-elb"             = "1"
   }
 }
 
 resource "aws_subnet" "private_subnet_b" {
- 
-  vpc_id     = aws_vpc.vpc_app.id
-  cidr_block = var.private_ecs_cidr_b
+  vpc_id            = aws_vpc.vpc_app.id
+  cidr_block        = var.private_ecs_cidr_b
   availability_zone = "eu-west-2c"
 
   tags = {
-    Name        = "private-subnet-b-${var.environment}"
-    Environment = var.environment
-    "kubernetes.io/cluster/url-shortener-dev" = "shared"
-    "kubernetes.io/role/internal-elb"         = "1"
+    Name                                          = "private-subnet-b-${var.environment}"
+    Environment                                   = var.environment
+    "kubernetes.io/cluster/url-shortener-${var.environment}" = "shared"
+    "kubernetes.io/role/internal-elb"             = "1"
   }
 }
 

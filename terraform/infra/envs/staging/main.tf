@@ -66,6 +66,17 @@ module "bastion_host" {
 }
 
 
+
+
+module "cloudwatch" {
+  source                 = "../../../modules/cloudwatch"
+ 
+  sqs_queue_name         = module.sqs.sqs_queue_name
+  dlq_queue_name         = module.sqs.dlq_queue_name
+  db_identifier          = module.rds.db_identifier
+  environment            = "production"
+}
+
 module "waf" {
     source = "../../../modules/waf"
     environment   = var.environment
