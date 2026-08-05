@@ -8,7 +8,7 @@ jobs:
       id-token: write
       contents: read
     env:
-      AWS_ACCOUNT_ID: 703844615264
+      AWS_ACCOUNT_ID: 235654897837
       WORK_DIR: terraform/infra/envs/prod
     steps:
       - name: Checkout repo
@@ -17,7 +17,7 @@ jobs:
       - name: Configure AWS via OIDC
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          role-to-assume: arn:aws:iam::703844615264:role/githuboicd-deploy
+          role-to-assume: arn:aws:iam::235654897837:role/githuboicd-deploy
           aws-region: eu-west-2
 
       - name: Install tflint
