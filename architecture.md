@@ -1,8 +1,20 @@
+# Architecture — Multi-Service URL Shortener on EKS (Kubernetes Layer)
+
+This document covers the Kubernetes layer mainly: workloads, Services, Ingress, Helm packaging, IRSA, observability, AWS services used by EKS provision with Terraform and GitOps.
+
+## Traffic Route
+
+Traffic reaches the cluster via an external ALB following this route displayed below.
+
+```
+ALB → nginx-ingress (in-cluster) → api-service / dashboard-service → Deployments
+```
+
 Everything from nginx-ingress inward is covered below.
 
 Application architecture diagram from user to application end-to-end including CI/CD, AWS services implemented, and DNS (Cloudflare) HTTPS.
 
-`assets/architecture.png`
+![Architecture Diagram](assets/architecture.png)
 
 ## EKS Cluster
 
