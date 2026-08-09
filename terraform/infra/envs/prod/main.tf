@@ -51,12 +51,6 @@ module "eks" {
 }
 
 
-
-module "s3" {
-  source        = "../../../modules/s3"
-  environment   = var.environment
-}
-
 module "bastion_host" {
   source = "../../../modules/bastion_host"
   vpc_id        = module.networking.vpc_id
@@ -85,5 +79,5 @@ module "waf" {
 
 variable "environment" {
   type = string
-  default = "staging"
+  default = "prod"
 }

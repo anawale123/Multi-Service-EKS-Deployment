@@ -1,9 +1,11 @@
 resource "aws_subnet" "public_natgateway" {
+   
   vpc_id     = aws_vpc.vpc_app.id
   cidr_block = var.nategateway_cidr
 
   tags = {
     Environment = var.environment
+     name       = "nat-gateway-${var.environment}"
   }
 }
 
@@ -13,6 +15,7 @@ resource "aws_subnet" "alb_subnet" {
   availability_zone = "eu-west-2c"
 
   tags = {
+    name                                          = "alb_subnet_a-${var.environment}"
     Environment                                   = var.environment
     "kubernetes.io/role/elb"                      = "1"
     "kubernetes.io/cluster/url-shortener-staging" = "shared"
@@ -25,6 +28,7 @@ resource "aws_subnet" "alb_subnet_b" {
   availability_zone = "eu-west-2b"
 
   tags = {
+    name                                          = "alb_subnet_b-${var.environment}"
     Environment                                   = var.environment
     "kubernetes.io/role/elb"                      = "1"
     "kubernetes.io/cluster/url-shortener-staging" = "shared"
