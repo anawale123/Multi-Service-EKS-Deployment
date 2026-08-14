@@ -44,6 +44,7 @@ jobs:
           | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
 
       - name: Build api_image
+        if: ${{ github.event.inputs.service == 'api' || github.event.inputs.service == 'all' }}
         run: |
           docker build \
             --cache-from=type=gha \
@@ -51,7 +52,9 @@ jobs:
             -f url-shortener/app/Dockerfile \
             -t api_image:latest \
             url-shortener/app/
+
       - name: Scan api_image
+        if: ${{ github.event.inputs.service == 'api' || github.event.inputs.service == 'all' }}
         uses: aquasecurity/trivy-action@v0.20.0
         with:
           image-ref: api_image:latest
@@ -62,6 +65,7 @@ jobs:
           args: --ignorefile ./.trivyignore
 
       - name: Check trivy results api_image
+        if: ${{ github.event.inputs.service == 'api' || github.event.inputs.service == 'all' }}
         run: |
           if grep -q '"Status": "unfixed"' trivy-api.json; then
             echo "vulnerabilities still there"
@@ -69,7 +73,9 @@ jobs:
           else
             echo "all vulnerabilities fixed, proceed"
           fi
+
       - name: Push api_image
+        if: ${{ github.event.inputs.service == 'api' || github.event.inputs.service == 'all' }}
         id: push_api
         run: |
           registry="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/api_image"
@@ -79,7 +85,9 @@ jobs:
           docker tag api_image:latest "${registry}:latest"
           docker push "${registry}:latest"
           echo "image=${registry}:${image_tag}" >> $GITHUB_OUTPUT
+
       - name: Build dashboard_image
+        if: ${{ github.event.inputs.service == 'dashboard' || github.event.inputs.service == 'all' }}
         run: |
           docker build \
             --cache-from=type=gha \
@@ -87,7 +95,9 @@ jobs:
             -f url-shortener/services/dashboard/Dockerfile \
             -t dashboard_image:latest \
             url-shortener/services/dashboard/
+
       - name: Scan dashboard_image
+        if: ${{ github.event.inputs.service == 'dashboard' || github.event.inputs.service == 'all' }}
         uses: aquasecurity/trivy-action@v0.20.0
         with:
           image-ref: dashboard_image:latest
@@ -98,6 +108,7 @@ jobs:
           args: --ignorefile ./.trivyignore
 
       - name: Check trivy results dashboard_image
+        if: ${{ github.event.inputs.service == 'dashboard' || github.event.inputs.service == 'all' }}
         run: |
           if grep -q '"Status": "unfixed"' trivy-dashboard.json; then
             echo "vulnerabilities still there"
@@ -105,7 +116,9 @@ jobs:
           else
             echo "all vulnerabilities fixed, proceed"
           fi
+
       - name: Push dashboard_image
+        if: ${{ github.event.inputs.service == 'dashboard' || github.event.inputs.service == 'all' }}
         id: push_dashboard
         run: |
           registry="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/dashboard_image"
@@ -115,7 +128,9 @@ jobs:
           docker tag dashboard_image:latest "${registry}:latest"
           docker push "${registry}:latest"
           echo "image=${registry}:${image_tag}" >> $GITHUB_OUTPUT
+
       - name: Build worker_image
+        if: ${{ github.event.inputs.service == 'worker' || github.event.inputs.service == 'all' }}
         run: |
           docker build \
             --cache-from=type=gha \
@@ -123,7 +138,9 @@ jobs:
             -f url-shortener/services/worker/Dockerfile \
             -t worker_image:latest \
             url-shortener/services/worker/
+
       - name: Scan worker_image
+        if: ${{ github.event.inputs.service == 'worker' || github.event.inputs.service == 'all' }}
         uses: aquasecurity/trivy-action@v0.20.0
         with:
           image-ref: worker_image:latest
@@ -134,6 +151,7 @@ jobs:
           args: --ignorefile ./.trivyignore
 
       - name: Check trivy results worker_image
+        if: ${{ github.event.inputs.service == 'worker' || github.event.inputs.service == 'all' }}
         run: |
           if grep -q '"Status": "unfixed"' trivy-worker.json; then
             echo "vulnerabilities still there"
@@ -141,7 +159,9 @@ jobs:
           else
             echo "all vulnerabilities fixed, proceed"
           fi
+
       - name: Push worker_image
+        if: ${{ github.event.inputs.service == 'worker' || github.event.inputs.service == 'all' }}
         id: push_worker
         run: |
           registry="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/worker_image"
