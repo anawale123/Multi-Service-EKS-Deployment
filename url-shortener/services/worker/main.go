@@ -11,10 +11,14 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/service/sqs"
 	_ "github.com/lib/pq"
 )
 
 var db *sql.DB
+var sqsClient *sqs.Client
 
 type ClickEvent struct {
 	ShortCode string `json:"short_code"`
@@ -51,6 +55,8 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
+	initSQS(ctx)
+
 	go func() {
 		mux := http.NewServeMux()
 		mux.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
@@ -77,6 +83,14 @@ func main() {
 
 	log.Println("Analytics worker started, polling SQS...")
 	pollSQS(ctx, sqsQueue)
+}
+
+func initSQS(ctx context.Context) {
+	cfg, err := config.LoadDefaultConfig(ctx)
+	if err != nil {
+		log.Fatalf("Failed to load AWS config: %v", err)
+	}
+	sqsClient = sqs.NewFromConfig(cfg)
 }
 
 func migrate() {
@@ -115,7 +129,7 @@ func pollSQS(ctx context.Context, queueURL string) {
 			log.Println("Worker stopped")
 			return
 		default:
-			messages := receiveSQSMessages(queueURL)
+			messages := receiveSQSMessages(ctx, queueURL)
 			for _, msg := range messages {
 				if err := processClickEvent(msg); err != nil {
 					log.Printf("Failed to process event: %v", err)
@@ -130,8 +144,29 @@ func pollSQS(ctx context.Context, queueURL string) {
 	}
 }
 
-func receiveSQSMessages(queueURL string) []string {
-	return nil
+func receiveSQSMessages(ctx context.Context, queueURL string) []string {
+	out, err := sqsClient.ReceiveMessage(ctx, &sqs.ReceiveMessageInput{
+		QueueUrl:            aws.String(queueURL),
+		MaxNumberOfMessages: 10,
+		WaitTimeSeconds:     10,
+	})
+	if err != nil {
+		log.Printf("Failed to receive SQS messages: %v", err)
+		return nil
+	}
+
+	var bodies []string
+	for _, msg := range out.Messages {
+		bodies = append(bodies, *msg.Body)
+		_, err := sqsClient.DeleteMessage(ctx, &sqs.DeleteMessageInput{
+			QueueUrl:      aws.String(queueURL),
+			ReceiptHandle: msg.ReceiptHandle,
+		})
+		if err != nil {
+			log.Printf("Failed to delete SQS message: %v", err)
+		}
+	}
+	return bodies
 }
 
 func processClickEvent(raw string) error {
