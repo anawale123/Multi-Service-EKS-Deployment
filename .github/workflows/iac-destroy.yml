@@ -36,7 +36,7 @@ jobs:
       - name: Configure AWS via OIDC
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          role-to-assume: arn:aws:iam::703844615264:role/githuboicd-deploy
+          role-to-assume: arn:aws:iam::235654897837:role/terraform_teardown
           aws-region: eu-west-2
 
       - name: Install Terraform

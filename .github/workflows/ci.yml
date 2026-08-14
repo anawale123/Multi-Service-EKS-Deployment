@@ -2,6 +2,16 @@ name: Automating image push to AWS ECR with OIDC
 
 on:
   workflow_dispatch:
+    inputs:
+      service:
+        description: "Which image to publish?"
+        required: true
+        type: choice
+        options:
+          - api
+          - dashboard
+          - worker
+          - all
 
 jobs:
   build-and-publish:
