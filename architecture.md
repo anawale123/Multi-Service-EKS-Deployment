@@ -133,8 +133,8 @@ Separate chart installs from the url-shortener app chart above, external charts 
 |---|---|---|
 | ingress-nginx | Ingress controller handling in-cluster routing | helm/ingress-nginx-values.yml |
 | aws-load-balancer-controller | Manages the ALB, sitting in front of ingress-nginx | helm/template/alb |
-| grafana & prometheus | observerabilility | installed on cli
-| ArgoCD | git ops  | installed on cli
+| grafana & prometheus | observerabilility | installed via cli
+| ArgoCD | git ops  | installed via cli
 
 
 ## Compute
