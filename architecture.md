@@ -36,6 +36,15 @@ Covering additional AWS resources and modifications that are required for AWS EK
 | `kubernetes.io/role/elb=1` | Public (ALB) subnets | Tells the ALB Controller to place internet-facing load balancers here |
 | `kubernetes.io/role/internal-elb=1` | Private subnets | Tells the ALB Controller to place internal load balancers here |
 
+**nat-gw**
+
+| Resource | Applied to | Purpose |
+|---|---|---|
+| NAT Gateway | Public subnet | Outbound internet access for private-subnet nodes |
+| Route (`0.0.0.0/0`) | Private subnet route table | Sends node egress traffic through the NAT Gateway |
+
+NAT Gateway implemented to provide outbound access for nodes, enabling them to pull external Helm chart images and sync with ArgoCD.
+
 **Control Plane ↔ Node Security Group Rules**
 
 Additional security group rules added to enable communication between cluster and nodes.
@@ -118,13 +127,15 @@ No `secrets.yaml` template. Kubernetes Secrets (db-secret, redis-secret) are cre
 
 **Third-Party Helm Installs**
 
-Separate chart installs from the url-shortener app chart above — installed independently, not part of `templates/`.
+Separate chart installs from the url-shortener app chart above, external charts are installed independently, not part of `templates/` only is.
 
 | Chart | Purpose | Values file |
 |---|---|---|
 | ingress-nginx | Ingress controller handling in-cluster routing | helm/ingress-nginx-values.yml |
-| aws-load-balancer-controller | Manages the ALB, sitting in front of ingress-nginx | (path to confirm) |
-| cert-manager | TLS certificate issuance via Let's Encrypt | (path to confirm) |
+| aws-load-balancer-controller | Manages the ALB, sitting in front of ingress-nginx | helm/template/alb |
+| grafana & prometheus | observerabilility | installed on cli
+| ArgoCD | git ops  | installed on cli
+
 
 ## Compute
 
