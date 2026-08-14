@@ -16,8 +16,8 @@ Project focuses on delivering a secure platform for a multi-service container sy
 
 | Document | Covers |
 |---|---|
-| [ARCHITECTURE.md](./ARCHITECTURE.md) | EKS/AWS infrastructure and Kubernetes Helm packaging in detail, including diagrams for the infrastructure layer and the per-container Helm setup |
-| [DEPLOYMENT.md](./DEPLOYMENT.md) | The iterative phases of deployment |
+| [ARCHITECTURE.md](./architecture.md) | EKS/AWS infrastructure and Kubernetes Helm packaging in detail, including diagrams for the infrastructure layer and the per-container Helm setup |
+| [DEPLOYMENT.md](./deployment.md) | The iterative phases of deployment |
 
 ## Live Demo
 
