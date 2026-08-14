@@ -101,3 +101,4 @@ resource "aws_security_group_rule" "nodes_from_cluster_10250" {
   security_group_id        = aws_security_group.nodes_sg.id
   source_security_group_id = aws_security_group.cluster_sg.id
 }
+
