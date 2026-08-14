@@ -50,7 +50,7 @@ dashboard:
       cpu: "500m"
 
 worker:
-  image: "235654897837.dkr.ecr.eu-west-2.amazonaws.com/worker_image"
+  image: "235654897837.dkr.ecr.eu-west-2.amazonaws.com/worker_image:96d9a10"
   replicaCount: 1
 
   secrets:
