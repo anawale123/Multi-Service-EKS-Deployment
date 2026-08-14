@@ -10,7 +10,9 @@ api:
   secrets:
     db: "db-secret"
     redis: "redis-secret"
-
+  
+  irsaRoleArn: "arn:aws:iam::235654897837:role/api-irsa-prod"
+  
   config:
     APP_ENV: "prod"
     DB_HOST: "rds-db-prod.c9k6ou4igzom.eu-west-2.rds.amazonaws.com"
