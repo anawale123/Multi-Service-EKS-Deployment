@@ -9,3 +9,4 @@ data:
   DB_PORT: {{ .Values.api.config.DB_PORT | quote }}
   REDIS_HOST: {{ .Values.api.config.REDIS_HOST | quote }}
   REDIS_PORT: {{ .Values.api.config.REDIS_PORT | quote }}
+  SQS_QUEUE_URL: {{ .Values.api.config.SQS_QUEUE_URL | quote }}

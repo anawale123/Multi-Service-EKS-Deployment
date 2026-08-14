@@ -17,9 +17,8 @@ api:
     DB_PORT: "5432"
     REDIS_HOST: "master.shortener-redis-prod.8sfgq4.euw2.cache.amazonaws.com:6379"
     REDIS_PORT: "6379"
-
-  irsaRoleArn: "arn:aws:iam::235654897837:role/api-irsa-prod"
-
+    SQS_QUEUE_URL: "https://sqs.eu-west-2.amazonaws.com/235654897837/sqs-queue"
+  
   resources:
     requests:
       memory: "128Mi"
