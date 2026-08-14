@@ -1,5 +1,5 @@
 # Stage 1 - deps
-FROM golang:1.23-alpine AS deps
+FROM golang:1.24-alpine AS deps
 
 RUN apk add --no-cache \
     gcc \
